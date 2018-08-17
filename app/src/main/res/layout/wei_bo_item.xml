@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:padding="2dp">
+
+        <LinearLayout
+            android:id="@+id/head"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/user_img"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_margin="3dp"
+                android:src="@color/black"
+                android:contentDescription="@string/image"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_margin="3dp"
+                android:layout_marginStart="10dp">
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+
+                    tools:text="令人战栗的新闻"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true">
+
+                    <TextView
+                        android:id="@+id/send_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="07-24 09:22"
+                        />
+
+                    <TextView
+                        android:id="@+id/from"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/from"
+                        android:layout_toEndOf="@+id/send_time"
+                        android:layout_marginStart="15dp"/>
+
+                    <TextView
+                        android:id="@+id/wei_bo_source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/from"
+                        android:layout_marginStart="15dp"
+                        tools:text="iphone X"/>
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+
+            android:id="@+id/wei_bo_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/head"
+            android:padding="10dp"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/wei_bo_content_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="7"
+                android:ellipsize="end"
+                android:textColor="@color/black"
+                android:lineSpacingExtra="5dp"
+                android:lineSpacingMultiplier="1.1"
+                tools:text="撒大苏打顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶反反复复烦烦烦烦烦烦烦烦烦烦烦烦烦烦烦顶顶顶顶顶顶顶顶顶顶顶顶顶顶"/>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"
+            android:background="@color/light_grey"
+            android:layout_margin="5dp"
+            android:alpha="200"
+            android:layout_marginTop="2dp"
+            android:layout_below="@+id/wei_bo_content"
+            />
+        <RelativeLayout
+            android:padding="1dp"
+            android:layout_margin="3dp"
+            android:layout_below="@+id/line"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:baselineAligned="false">
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/img_padding"
+                tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    android:id="@+id/share"
+                    android:layout_width="@dimen/foot_img"
+                    android:layout_height="@dimen/foot_img"
+                    android:src="@drawable/ic_share_black_24dp"
+                    android:contentDescription="@string/image"
+
+                    />
+
+                <TextView
+                    android:id="@+id/share_counts"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="100"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:ignore="UseCompoundDrawables">
+                <ImageView
+                    android:id="@+id/comment"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="@dimen/foot_img"
+                    android:layout_height="@dimen/foot_img"
+                    android:src="@drawable/ic_sms"
+                    android:contentDescription="@string/image" />
+                <TextView
+                    android:id="@+id/comment_counts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    tools:text="100"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="15dp"
+                tools:ignore="RelativeOverlap,UseCompoundDrawables">
+                <ImageView
+                    android:id="@+id/thumb_up"
+                    android:layout_marginStart="5dp"
+                    android:layout_width="@dimen/foot_img"
+                    android:layout_height="@dimen/foot_img"
+                    android:src="@drawable/ic_thumb_up"
+                    android:contentDescription="@string/image" />
+
+                <TextView
+                    android:id="@+id/thumb_up_counts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    tools:text="100"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+</RelativeLayout>
+
+<!-- 首页微博展示 -->
+

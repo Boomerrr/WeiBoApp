@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <include
+            layout="@layout/wei_bo_item"
+            android:id="@+id/wei_bo_item"/>
+
+        <View
+            android:id="@+id/dividing_line"
+            android:layout_width="match_parent"
+            android:background="@color/light_grey"
+            android:layout_height="15dp"
+            android:layout_below="@+id/wei_bo_item"/>
+        <RelativeLayout
+            android:id="@+id/comment_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dividing_line">
+
+            <LinearLayout
+                android:id="@+id/comment_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+                <TextView
+                    android:id="@+id/comment_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="bold"
+                    android:text="@string/comment"
+                    tools:ignore="SpUsage" />
+                <TextView
+                    android:id="@+id/comment_count_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    tools:text="100"
+                    tools:ignore="SpUsage" />
+
+            </LinearLayout>
+            <View
+                android:id="@+id/dividing_line2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_margin="3dp"
+                android:background="@color/light_grey"
+                android:layout_below="@id/comment_title"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/comment_content_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:layout_margin="8dp"
+                android:layout_below="@id/dividing_line2">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
+
+<!-- 微博正文 -->

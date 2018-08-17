@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/comment_content_padding"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/commenter_user_img"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+
+        />
+    <RelativeLayout
+        android:id="@+id/comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/commenter_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            tools:text="情感sir"
+            />
+        <TextView
+            android:id="@+id/comment_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/commenter_user_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="10"
+            android:lineSpacingMultiplier="1"
+            tools:text="很喜欢的一句话，“为什么有些人明明看起来很友善，却总是独来独往？” “待人友善是修养，独来独往是性格”"/>
+
+        <TextView
+            android:id="@+id/comment_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/comment_text"
+            tools:text="8-8 23:42"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+<!-- 单条评论界面 -->

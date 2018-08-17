@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="foot_img">20dp</dimen>
+    <dimen name="foot_item_gap">40dp</dimen>
+    <dimen name="img_padding">15dp</dimen>
+    <dimen name="comment_content_padding">3dp</dimen>
+</resources>
