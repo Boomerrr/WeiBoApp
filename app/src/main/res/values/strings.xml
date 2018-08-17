@@ -1,3 +1,34 @@
 <resources>
-    <string name="app_name">WeiBoApp</string>
+    <string name="app_name">weibo</string>
+    <string name="sign_out">sign out</string>
+    <string name="find_user">find user</string>
+    <string name="send_weibo">send weibo</string>
+    <string name="wake_weibo">wake weibo</string>
+    <string name="first_page">首页</string>
+    <string name="image">image</string>
+    <string name="me">我</string>
+    <string name="from">来自</string>
+    <string name="comment">评 论</string>
+    <string name="weibo">微博</string>
+    <string name="weibo_English">weibo</string>
+    <string name="add_account">添加账号</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="register_hint">手机号/邮箱</string>
+    <string name="prompt_email">账号</string>
+    <string name="prompt_password">密码</string>
+
+    <string name="action_sign_in">登  录</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="register_oauth">注 册 并 授 权</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="back">back</string>
 </resources>
