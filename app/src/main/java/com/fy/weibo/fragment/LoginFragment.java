@@ -18,9 +18,13 @@ import android.widget.TextView;
 
 import com.fy.weibo.R;
 import com.fy.weibo.activity.LoginActivity;
-import com.fy.weibo.activity.Main2Activity;
+import com.fy.weibo.activity.MainActivity;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.DataBaseUtil;
+import com.sina.weibo.sdk.auth.AccessTokenKeeper;
+import com.sina.weibo.sdk.auth.Oauth2AccessToken;
+
+import java.util.Objects;
 
 /**
  * Created by Fan on 2018/8/16.
@@ -47,6 +51,7 @@ public class LoginFragment extends Fragment {
         registerText = view.findViewById(R.id.login_text);
         signButton = view.findViewById(R.id.sign_in_button);
         loginActivity = (LoginActivity) getActivity();
+        Log.e("TAG", "hello");
         if (loginActivity != null) {
             TextView textView = loginActivity.textView;
             textView.setText("登  录");
@@ -56,6 +61,7 @@ public class LoginFragment extends Fragment {
         registerText.setOnClickListener(v -> {
             FragmentTransaction transaction = loginActivity.fragmentManager.beginTransaction();
             transaction.replace(R.id.login_frame, new RegisterFragment());
+            transaction.addToBackStack(null);
             transaction.setCustomAnimations(R.anim.in_from_left, R.anim.out_to_right);
             transaction.commit();
         });
@@ -65,8 +71,14 @@ public class LoginFragment extends Fragment {
             } else if (!checkPassword()) {
                 Log.e("TAG", "密码错误");
             } else {
+
                 Constants.ACCESS_TOKEN = getToken();
-                Intent intent = new Intent(loginActivity, Main2Activity.class);
+                Oauth2AccessToken accessToken = new Oauth2AccessToken(Constants.ACCESS_TOKEN, null);
+                AccessTokenKeeper.writeAccessToken(getActivity(), accessToken);
+                // String token = Objects.requireNonNull(AccessTokenKeeper.readAccessToken(getActivity())).getToken();
+                // Log.e("TAG", "从AccessTokenKeeper中读取到的token   " + token);
+                // Log.e("TAG", "Constants.ACCESS_TOKEN  " + Constants.ACCESS_TOKEN);
+                Intent intent = new Intent(loginActivity, MainActivity.class);
                 startActivity(intent);
             }
         });
