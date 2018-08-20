@@ -101,6 +101,18 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
         commentCounts.setText(weiBo.getComments_count());
         shareCounts.setText(weiBo.getReposts_count());
         thumbUpCounts.setText(weiBo.getAttitudes_count());
+        List<PicUrlsBean> imgUrls = weiBo.getPic_urls();
+        if (imgUrls != null) {
+            List<String> urls = new ArrayList<>();
+            for (PicUrlsBean url: imgUrls) {
+                urls.add(url.getThumbnail_pic().replaceFirst("thumbnail", "bmiddle"));
+            }
+            RecyclerView imgRecyclerView = findViewById(R.id.wei_bo_img_recycler);
+            imgRecyclerView.setNestedScrollingEnabled(false);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+            imgRecyclerView.setLayoutManager(gridLayoutManager);
+            WeiBoImgAdapter adapter = new WeiBoImgAdapter(this, urls);
+            imgRecyclerView.setAdapter(adapter);
 
     }
 

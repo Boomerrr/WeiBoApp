@@ -92,6 +92,18 @@
                 android:lineSpacingMultiplier="1.1"
                 tools:text="撒大苏打顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶顶反反复复烦烦烦烦烦烦烦烦烦烦烦烦烦烦烦顶顶顶顶顶顶顶顶顶顶顶顶顶顶"/>
 
+           <android.support.v7.widget.RecyclerView
+                android:id="@+id/wei_bo_img_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/wei_bo_content_text"
+                android:focusable="false"
+                android:layout_marginTop="5dp"
+                android:focusableInTouchMode="false">
+
+            </android.support.v7.widget.RecyclerView>
+
+
         </LinearLayout>
 
         <View
