@@ -4,6 +4,7 @@ import com.fy.weibo.util.ReUtil;
 import com.fy.weibo.util.TimeUtil;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Fan on 2018/7/30.
@@ -21,6 +22,12 @@ public class WeiBo implements Serializable {
     private int attitudes_count;
     private String source;
     private SimpleUser user;
+    private List<PicUrlsBean> pic_urls;
+
+
+    public List<PicUrlsBean> getPic_urls() {
+        return pic_urls;
+    }
 
 
     public String getIdstr() {
@@ -99,5 +106,14 @@ public class WeiBo implements Serializable {
     public void setUser(SimpleUser user) {
         this.user = user;
     }
+
+    public void setPic_urls(List<PicUrlsBean> pic_urls) {
+        this.pic_urls = pic_urls;
+    }
+
+    public void setIdstr(String idstr) {
+        this.idstr = idstr;
+    }
+
 
 }
