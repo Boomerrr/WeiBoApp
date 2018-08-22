@@ -5,9 +5,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,11 +15,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.fy.weibo.Base.BaseActivity;
 import com.fy.weibo.R;
 import com.fy.weibo.adapter.CommentsAdapter;
+import com.fy.weibo.adapter.WeiBoImgAdapter;
 import com.fy.weibo.bean.Comments;
+import com.fy.weibo.bean.PicUrlsBean;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,13 +48,10 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
     @Override
     public void setData(final List<Comments> comments) {
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                commentsList = comments;
-                commentsAdapter = new CommentsAdapter(ContentActivity.this, commentsList);
-                recyclerView.setAdapter(commentsAdapter);
-            }
+        runOnUiThread(() -> {
+            commentsList = comments;
+            commentsAdapter = new CommentsAdapter(ContentActivity.this, commentsList);
+            recyclerView.setAdapter(commentsAdapter);
         });
     }
 
@@ -88,7 +88,7 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
         TextView commentCounts = findViewById(R.id.comment_counts);
         TextView shareCounts = findViewById(R.id.share_counts);
         TextView thumbUpCounts = findViewById(R.id.thumb_up_counts);
-        weiBoText.setMaxLines(20);
+        weiBoText.setMaxLines(100);
         weiBoText.setText(weiBo.getText());
         RequestOptions options = new RequestOptions().placeholder(new ColorDrawable(Color.WHITE));
         Glide.with(this)
@@ -113,8 +113,10 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
             imgRecyclerView.setLayoutManager(gridLayoutManager);
             WeiBoImgAdapter adapter = new WeiBoImgAdapter(this, urls);
             imgRecyclerView.setAdapter(adapter);
+        }
 
     }
+
 
     @Override
     public void loadData() {
