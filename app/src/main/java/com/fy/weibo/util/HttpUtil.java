@@ -63,6 +63,28 @@ public class HttpUtil {
         call.enqueue(callback);
 
     }
+
+
+
+
+//评论部分post
+    public static void sendOkhttpRequest1(String address, String token, String id, String comment, Callback callback){
+
+        try {
+            OkHttpClient client=new OkHttpClient();
+            String idstr=String.valueOf(id);
+            FormBody.Builder formBodyBuilder = new FormBody.Builder();
+            FormBody formBody = formBodyBuilder.add("comment",comment).build();
+            Request request=new Request.Builder().url(
+                    address+"?access_token="+token+"&id="+idstr
+            ).post(formBody).build();
+            Call call = client.newCall(request);
+            call.enqueue(callback);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 
 /*

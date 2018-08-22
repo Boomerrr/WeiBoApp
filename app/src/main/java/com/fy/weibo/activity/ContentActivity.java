@@ -1,14 +1,24 @@
 package com.fy.weibo.activity;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -21,7 +31,9 @@ import com.fy.weibo.bean.PicUrlsBean;
 import com.fy.weibo.bean.WeiBo;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
+import com.fy.weibo.util.HttpUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +41,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
-public class ContentActivity extends BaseActivity<List<Comments>> {
+public class ContentActivity extends BaseActivity<List<Comments>> implements View.OnClickListener {
 
 
     private RecyclerView recyclerView;
@@ -88,6 +103,8 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
         TextView commentCounts = findViewById(R.id.comment_counts);
         TextView shareCounts = findViewById(R.id.share_counts);
         TextView thumbUpCounts = findViewById(R.id.thumb_up_counts);
+        ImageView commentImage=findViewById(R.id.comment);//获取评论图标
+        commentImage.setOnClickListener(this);//图标设置点击事件
         weiBoText.setMaxLines(100);
         weiBoText.setText(weiBo.getText());
         RequestOptions options = new RequestOptions().placeholder(new ColorDrawable(Color.WHITE));
@@ -131,6 +148,81 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
     @Override
     public void showError(String e) {
         super.showError(e);
+    }
+
+    @Override
+    public void onClick(View v) {
+         switch(v.getId()){
+             case R.id.comment:
+                 WeiBo weiBo = (WeiBo) getIntent().getSerializableExtra("weibo");
+                 showPopupWindow(this,R.layout.weibo_comment_popupwindow,Constants.ACCESS_TOKEN,weiBo.getIdstr());
+         }
+    }
+
+
+
+
+
+    private void   showPopupWindow(final Context context, @LayoutRes int resource, final String token, final String id) {
+        //设置要显示的view
+        View view = View.inflate(context, resource, null);
+        //此处可按需求为各控件设置属性
+
+        final PopupWindow popupWindow = new PopupWindow(view);
+        //设置弹出窗口大小
+        popupWindow.setWidth(WindowManager.LayoutParams.FILL_PARENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        //必须设置以下两项，否则弹出窗口无法取消
+        popupWindow.setFocusable(true);
+        popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        Button cancel=(Button)view.findViewById(R.id.btn_cancel);
+        Button ok=(Button)view.findViewById(R.id.btn_comfirm);
+        final EditText editText=(EditText)view.findViewById(R.id.dialog_edit) ;
+        View.OnClickListener listener = new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                switch(view.getId()){
+                    case R.id.btn_cancel:
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.btn_comfirm:
+                        String info= String.valueOf(editText.getText());
+                        HttpUtil.sendOkhttpRequest1("https://api.weibo.com/2/comments/create.json",token,id,info,new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ContentActivity.this,"fail",Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(ContentActivity.this,"success",Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
+
+                            }
+                        });
+                        popupWindow.dismiss();
+                        break;
+                    default:
+                        break;
+                }
+            }};
+        cancel.setOnClickListener(listener);
+        ok.setOnClickListener(listener);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
 }
 

@@ -31,4 +31,8 @@
     <string name="register_oauth">注 册 并 授 权</string>
     <string name="confirm_password">确认密码</string>
     <string name="back">back</string>
+
+    <string name="comment_hint">请输入评论（不超过140字）</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
 </resources>
