@@ -18,7 +18,7 @@ import android.widget.TextView;
 
 import com.fy.weibo.R;
 import com.fy.weibo.activity.LoginActivity;
-import com.fy.weibo.activity.MainActivity;
+import com.fy.weibo.activity.Main2Activity;
 import com.fy.weibo.sdk.Constants;
 import com.fy.weibo.util.DataBaseUtil;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
@@ -78,7 +78,7 @@ public class LoginFragment extends Fragment {
                 // String token = Objects.requireNonNull(AccessTokenKeeper.readAccessToken(getActivity())).getToken();
                 // Log.e("TAG", "从AccessTokenKeeper中读取到的token   " + token);
                 // Log.e("TAG", "Constants.ACCESS_TOKEN  " + Constants.ACCESS_TOKEN);
-                Intent intent = new Intent(loginActivity, MainActivity.class);
+                Intent intent = new Intent(loginActivity, Main2Activity.class);
                 startActivity(intent);
             }
         });

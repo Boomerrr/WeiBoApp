@@ -28,7 +28,7 @@ public class StartActivity extends AppCompatActivity {
         Intent intent;
         String token = AccessTokenKeeper.readAccessToken(this).getToken();
         if (!token.equals("")) {
-            intent = new Intent(this, MainActivity.class);
+            intent = new Intent(this, Main2Activity.class);
             startActivity(intent);
 //            Constants.ACCESS_TOKEN = token;
         } else {

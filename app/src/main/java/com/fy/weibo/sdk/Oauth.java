@@ -9,7 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.fy.weibo.R;
-import com.fy.weibo.activity.MainActivity;
+import com.fy.weibo.activity.Main2Activity;
 import com.fy.weibo.util.DataBaseUtil;
 import com.sina.weibo.sdk.auth.AccessTokenKeeper;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
@@ -44,7 +44,7 @@ public class Oauth {
                 AccessTokenKeeper.writeAccessToken(activity, oauth2AccessToken);
                 if (activity != null) {
                     activity.runOnUiThread(() -> {
-                        Intent intent = new Intent(activity, MainActivity.class);
+                        Intent intent = new Intent(activity, Main2Activity.class);
                         activity.startActivity(intent);
                         activity.overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                     });
