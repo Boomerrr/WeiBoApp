@@ -12,13 +12,14 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.fy.weibo.Base.BaseActivity;
+import com.fy.weibo.base.BaseMVPActivity;
 import com.fy.weibo.R;
 import com.fy.weibo.adapter.CommentsAdapter;
 import com.fy.weibo.adapter.WeiBoImgAdapter;
 import com.fy.weibo.bean.Comments;
 import com.fy.weibo.bean.PicUrlsBean;
 import com.fy.weibo.bean.WeiBo;
+import com.fy.weibo.contract.CommentContract;
 import com.fy.weibo.presenter.CommentsPresenter;
 import com.fy.weibo.sdk.Constants;
 
@@ -30,7 +31,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ContentActivity extends BaseActivity<List<Comments>> {
+public final class ContentActivity extends BaseMVPActivity<CommentContract.CommentContractPresenter> implements CommentContract.CommentView {
 
 
     private RecyclerView recyclerView;
@@ -41,20 +42,7 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initData();
-
     }
-
-
-    @Override
-    public void setData(final List<Comments> comments) {
-
-        runOnUiThread(() -> {
-            commentsList = comments;
-            commentsAdapter = new CommentsAdapter(ContentActivity.this, commentsList);
-            recyclerView.setAdapter(commentsAdapter);
-        });
-    }
-
 
     @Override
     public int getLayoutId() {
@@ -74,11 +62,12 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
 
     @Override
     public void initPresenter() {
-        presenter = new CommentsPresenter(this);
+        mPresenter = getPresenter();
+        mPresenter.attachMV(this);
     }
 
-    public void initData() {
 
+    public void initData() {
         WeiBo weiBo = (WeiBo) getIntent().getSerializableExtra("weibo");
         TextView weiBoText = this.findViewById(R.id.wei_bo_content_text);
         CircleImageView userImage = this.findViewById(R.id.user_img);
@@ -118,19 +107,38 @@ public class ContentActivity extends BaseActivity<List<Comments>> {
     }
 
 
-    @Override
     public void loadData() {
-        WeiBo weiBo = (WeiBo) getIntent().getSerializableExtra("weibo");
-        String strId = weiBo.getIdstr();
-        Map<String, String> params = new HashMap<>();
-        params.put("access_token", Constants.ACCESS_TOKEN);
-        params.put("id", strId);
-        presenter.loadData(Constants.GET_COMMENT, params, presenter);
+        loadComments();
     }
 
     @Override
     public void showError(String e) {
         super.showError(e);
+    }
+
+    @Override
+    public CommentContract.CommentContractPresenter getPresenter() {
+        return new CommentsPresenter();
+    }
+
+    @Override
+    public void loadComments() {
+        WeiBo weiBo = (WeiBo) getIntent().getSerializableExtra("weibo");
+        String strId = weiBo.getIdstr();
+        Map<String, String> params = new HashMap<>();
+        params.put("access_token", Constants.ACCESS_TOKEN);
+        params.put("id", strId);
+        mPresenter.loadComments(Constants.GET_COMMENT, params);
+
+    }
+
+    @Override
+    public void setComments(List<Comments> comments) {
+        runOnUiThread(() -> {
+            this.commentsList = comments;
+            commentsAdapter = new CommentsAdapter(ContentActivity.this, commentsList);
+            recyclerView.setAdapter(commentsAdapter);
+        });
     }
 }
 

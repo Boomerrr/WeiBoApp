@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by Fan on 2018/8/14.
  * Fighting!!!
  */
-public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
+public final class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHolder> {
 
 
     private Context context;

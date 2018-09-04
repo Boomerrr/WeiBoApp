@@ -1,13 +1,13 @@
 package com.fy.weibo.presenter;
 
-import com.fy.weibo.Base.BasePresenter;
-import com.fy.weibo.bean.WeiBo;
-import com.fy.weibo.fragment.FirstPageFragment;
-import com.fy.weibo.interfaces.IView;
-import com.fy.weibo.model.ModelHandler;
-import com.fy.weibo.sdk.Constants;
+import android.util.Log;
 
-import java.util.HashMap;
+import com.fy.weibo.base.BasePresenter;
+import com.fy.weibo.bean.WeiBo;
+import com.fy.weibo.contract.WeiBoContract;
+import com.fy.weibo.fragment.WeiBoFragment;
+import com.fy.weibo.model.WeiBoModel;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,36 +15,29 @@ import java.util.Map;
  * Created by Fan on 2018/7/30.
  * Fighting!!!
  */
-public class WeiBoPresenter extends BasePresenter<List<WeiBo>> {
-
-
-    private IView<List<WeiBo>> iView;
-    private ModelHandler modelHandler;
-
-
-    public WeiBoPresenter(IView<List<WeiBo>> view) {
-        super(view);
-        modelHandler = ModelHandler.getInstance();
-        this.iView = view;
-    }
+public final class WeiBoPresenter extends WeiBoContract.WeiBoContractPresenter {
 
 
     @Override
-    public void onSuccess(List<WeiBo> data) {
-        iView.setData(data);
+    protected WeiBoModel getModel() {
+        return new WeiBoModel();
     }
 
     @Override
     public void onFailure(String e) {
-
+        Log.e("TAG", "错误信息 :" + e);
+        iView.showError(e);
     }
 
     @Override
-    public void loadData(String baseUrl, Map<String, String> params, BasePresenter presenter) {
-
-        modelHandler.getLastedPublicWeibo(baseUrl, params, this);
+    public void loadWeiBo(String baseUrl, Map<String, String> params) {
+        iModel.getWeiBoList(baseUrl, params, this);
     }
 
+    @Override
+    public void onSuccess(List<WeiBo> weiBoList) {
+        iView.setWeiBoList(weiBoList);
+    }
 }
 
 /*

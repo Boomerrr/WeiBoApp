@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/me"
-            android:title="@string/me"/>
 
         <item
+            android:icon="@drawable/article_black1"
             android:id="@+id/first_page"
             android:title="@string/first_page"/>
+
+        <item
+            android:id="@+id/sendWeiBo"
+            android:icon="@drawable/ic_create"
+            android:title="@string/send_weibo"/>
+        <item
+            android:id="@+id/my_comment"
+            android:title="@string/my_comments"
+            android:icon="@drawable/comment24dp"
+            />
+
+        <item
+            android:id="@+id/message"
+            android:icon="@drawable/message"
+            android:title="@string/mention_me"/>
     </group>
 </menu>
+

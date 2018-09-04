@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Fan on 2018/8/20.
  * Fighting!!!
  */
-public  class PicUrlsBean implements Serializable{
+public final class PicUrlsBean implements Serializable{
 
     private String thumbnail_pic;
 

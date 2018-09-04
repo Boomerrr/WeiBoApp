@@ -8,5 +8,4 @@
         <item name="colorAccent">@color/orange</item>
     </style>
 
-    <style name="Theme" parent="Theme.AppCompat">Theme</style>
 </resources>

@@ -1,11 +1,15 @@
 package com.fy.weibo.interfaces;
 
+import java.io.Serializable;
+
 /**
  * Created by Fan on 2018/8/12.
  * Fighting!!!
  */
-public interface IPresenter<T> {
+public interface IPresenter<V extends IBaseView> {
 
-    void onSuccess(T data);
-    void onFailure(String error);
+
+    void attachMV(V view);
+    void detach();
+    void onFailure(String e);
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * Created by Fan on 2018/7/31.
  * Fighting!!!
  */
-public class SimpleUser implements Serializable {
+public final class SimpleUser implements Serializable {
 
     private String idstr;
     private String screen_name;

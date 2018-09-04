@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Fan on 2018/7/30.
  * Fighting!!!
  */
-public class WeiBo implements Serializable {
+public final class WeiBo implements Serializable {
 
     private String idstr;
     private String created_at;

@@ -1,9 +1,9 @@
-package com.fy.weibo.Base;
-
+package com.fy.weibo.base;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,47 +13,47 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.fy.weibo.interfaces.IView;
-
-import java.util.List;
-import java.util.Map;
-
 /**
- * Created by Fan on 2018/7/30.
+ * Created by Fan on 2018/8/28.
  * Fighting!!!
  */
-public abstract class BaseFragment<T> extends Fragment implements IView<T>{
-
+public abstract class BaseFragment extends Fragment {
 
     protected BasePresenter presenter;
-    protected abstract void loadData();
-    public abstract void initPresenter();
     public abstract int getContentViewId();
     public abstract void initAllMembersView(Bundle saveInstanceState);
 
     protected Toast toast;
     public Context mContext;
     public View mRootView;
+    protected Activity mActivity;
 
+    public void loadData(){}
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         mRootView = inflater.inflate(getContentViewId(), container, false);
         checkActivityAttachContext();
-        this.mContext = getActivity();
-        initPresenter();
-        initAllMembersView(savedInstanceState);
-        loadData();
         return mRootView;
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initAllMembersView(savedInstanceState);
+        initData();
+        loadData();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        mActivity = (Activity) context;
+    }
+
     public void showError(String e) {
-        if (isAttachContext()) {
-            toast = Toast.makeText(mContext, e, Toast.LENGTH_SHORT);
-            toast.show();
-        }
 
     }
 
@@ -65,7 +65,7 @@ public abstract class BaseFragment<T> extends Fragment implements IView<T>{
     public void checkActivityAttachContext() {
 
         if (getActivity() == null) {
-            throw new ActivityNotAttachedException();
+            throw new BaseMVPFragment.ActivityNotAttachedException();
         }
     }
     public FragmentActivity getAttachActivity() {
@@ -84,6 +84,10 @@ public abstract class BaseFragment<T> extends Fragment implements IView<T>{
 
     }
     public void hideLoading() {
+
+    }
+
+    public void initData() {
 
     }
 

@@ -9,12 +9,13 @@
         android:id="@+id/commenter_user_img"
         android:layout_width="45dp"
         android:layout_height="45dp"
-
+        android:layout_marginTop="5dp"
         />
     <RelativeLayout
         android:id="@+id/comment_content"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
         <TextView
             android:id="@+id/commenter_user_name"
             android:layout_width="wrap_content"

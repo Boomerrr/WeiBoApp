@@ -26,7 +26,7 @@ import java.util.List;
  * Created by Fan on 2018/8/18.
  * Fighting!!!
  */
-public class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.ViewHolder> {
+public final class WeiBoImgAdapter extends RecyclerView.Adapter<WeiBoImgAdapter.ViewHolder> {
 
     private Context context;
     private List<String> imgUrlList;

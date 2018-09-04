@@ -1,7 +1,5 @@
 package com.fy.weibo.fragment;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,16 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.fy.weibo.App;
 import com.fy.weibo.R;
 import com.fy.weibo.activity.LoginActivity;
 import com.fy.weibo.sdk.Oauth;
-import com.fy.weibo.util.DataBaseUtil;
+import com.fy.weibo.util.DataBase;
+import com.fy.weibo.util.DataBaseHelper;
 
 /**
  * Created by Fan on 2018/8/16.
  * Fighting!!!
  */
-public class RegisterFragment extends Fragment {
+public final class RegisterFragment extends Fragment {
 
     EditText accountEdit;
     EditText passEdit;
@@ -29,7 +31,7 @@ public class RegisterFragment extends Fragment {
     private String account;
     private String password;
     LoginActivity loginActivity;
-    private DataBaseUtil dataBaseUtil;
+    private DataBase dataBase;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -37,9 +39,8 @@ public class RegisterFragment extends Fragment {
         View view = inflater.inflate(R.layout.register_frag_layout, container, false);
         if (getActivity() != null){
             loginActivity = (LoginActivity) getActivity();
-            dataBaseUtil =  new DataBaseUtil(loginActivity, "UserData.db", null, 1);
+            dataBase =  new DataBase(App.getAppInstance().getApplicationContext(), "UserData.db", null, 1);
         }
-
         loginActivity.textView.setText("注  册");
         accountEdit = view.findViewById(R.id.register_account);
         passEdit = view.findViewById(R.id.register_pass);
@@ -60,35 +61,27 @@ public class RegisterFragment extends Fragment {
     private boolean checkAccount() {
 
         account = accountEdit.getText().toString();
-        SQLiteDatabase sqLiteDatabase = dataBaseUtil.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.query("User", null, null, null, null, null, null);
         if (account.length() < 10){
+            Toast.makeText(loginActivity, "账号长度不够或前后密码不一致", Toast.LENGTH_SHORT).show();
             Log.e("TAG", "账号长度不够");
             return false;
         }
-        if (cursor.moveToFirst()) {
-            do {
-                String dbAccount = cursor.getString(cursor.getColumnIndex("account"));
-                if (account.equals(dbAccount)){
-                    Log.e("TAG", "相同账户");
-                    return false;
-                }
-                Log.e("TAG", dbAccount);
-                String a = cursor.getString(cursor.getColumnIndex("password"));
-                String d = cursor.getString(cursor.getColumnIndex("token"));
-                Log.e("TAG", a);
-                Log.e("TAG", d);
-            } while (cursor.moveToNext());
+
+        boolean isAccount = DataBaseHelper.getDataBaseHelper().checkRegisterAccount(account);
+        if (!isAccount){
+            Toast.makeText(loginActivity, "该账号已被注册", Toast.LENGTH_SHORT).show();
         }
-        cursor.close();
-        return true;
+       return isAccount;
     }
 
     private boolean checkPassword() {
 
         password = passEdit.getText().toString();
         String confirm = confirmEdit.getText().toString();
-        return password.length() >= 4 && confirm.equals(password);
+        boolean isPassword = password.length() >= 4 && confirm.equals(password);
+        if (!isPassword)
+            Toast.makeText(loginActivity, "密码长度应大于四位,且前后两次应一致", Toast.LENGTH_SHORT).show();
+        return isPassword;
     }
 
 }

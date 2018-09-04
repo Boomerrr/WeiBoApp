@@ -35,7 +35,7 @@ import okhttp3.FormBody;
  * Created by Fan on 2018/7/30.
  * Fighting!!!
  */
-public class WeiBoAdapter extends RecyclerView.Adapter<WeiBoAdapter.MyViewHolder> {
+public final class WeiBoAdapter extends RecyclerView.Adapter<WeiBoAdapter.MyViewHolder> {
 
 
     private List<WeiBo> lastedWeiBoList;

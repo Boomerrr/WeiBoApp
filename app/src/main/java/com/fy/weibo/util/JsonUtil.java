@@ -1,8 +1,8 @@
 package com.fy.weibo.util;
 
-import android.util.Log;
-
 import com.fy.weibo.bean.Comments;
+import com.fy.weibo.bean.TokenInfo;
+import com.fy.weibo.bean.UserInfo;
 import com.fy.weibo.bean.WeiBo;
 import com.google.gson.Gson;
 
@@ -21,7 +21,7 @@ public class JsonUtil {
 
 
     // 微博
-    public static List<WeiBo> getLastedPublicWeiBo(String json) {
+    public static List<WeiBo> getWeiBo(String json) {
 
         List<WeiBo> lastedWeiBo = new ArrayList<>();
 
@@ -64,6 +64,20 @@ public class JsonUtil {
         }
 
         return commentList;
+    }
+
+    public static TokenInfo get_token_info(String json) {
+
+        TokenInfo tokenInfo = null;
+        Gson gson = new Gson();
+        tokenInfo = gson.fromJson(json, TokenInfo.class);
+        return tokenInfo;
+    }
+
+    public static UserInfo getUserInfo(String json) {
+
+        Gson gson = new Gson();
+        return gson.fromJson(json, UserInfo.class);
     }
 }
 

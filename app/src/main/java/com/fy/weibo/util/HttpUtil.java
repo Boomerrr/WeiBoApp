@@ -1,42 +1,75 @@
 package com.fy.weibo.util;
 
+import android.util.Log;
+import com.fy.weibo.App;
+import java.io.File;
 import java.util.Map;
 import java.util.Map.*;
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
  * Created by Fan on 2018/7/24.
  * Fighting!!!
  */
-public class HttpUtil {
+public  class HttpUtil {
 
-/*
- 参数只有token时才能使用该方法
-*/
-    public static void getData(String address, Map<String, String> params, Callback callback) {
+    private HttpCacheInterceptor cacheInterceptor = new HttpCacheInterceptor();
+    private  int CACHE_SIZE = 10 * 1024 * 1024;
+    private String CACHE_PATH = App.getAppInstance().getApplicationContext().getCacheDir() + "/okCache";
+    public static HttpUtil getHttpUtil() {
+        return HttpUtilHolder.httpUtil;
+    }
 
-        OkHttpClient client = new OkHttpClient();
+    private static class HttpUtilHolder{
+        private static HttpUtil httpUtil = new HttpUtil();
+    }
+
+    private OkHttpClient.Builder okHttpBuilder = new OkHttpClient
+            .Builder()
+            .addInterceptor(getLoggerInterceptor());
+
+    private HttpLoggingInterceptor getLoggerInterceptor() {
+        HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.HEADERS;
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.d("APIUrl", "----->" + message));
+        loggingInterceptor.setLevel(level);
+        return loggingInterceptor;
+    }
+
+    private Cache getCache(String cachePath, long cacheSize) {
+        final String CACHE_PATH = App.getAppInstance()
+                .getApplicationContext()
+                .getCacheDir().getAbsolutePath() + cachePath;
+        File cacheFile = new File(CACHE_PATH);
+        return new Cache(cacheFile, cacheSize);
+    }
+
+
+    public  void getData(String address, Map<String, String> params, Callback callback) {
 
         HttpUrl httpUrl = HttpUrl.parse(address);
         if (httpUrl != null) {
-
             HttpUrl.Builder urlBuilder = httpUrl.newBuilder();
             for (Entry<String, String> entry : params.entrySet()) {
                 urlBuilder.addQueryParameter(entry.getKey(), entry.getValue());
-//                System.out.println(entry.getKey() + entry.getValue());
             }
             httpUrl = urlBuilder.build();
-            Request request = new Request.Builder()
-                    .url(httpUrl.toString())
-                    .build();
-//            System.out.println(httpUrl.toString());
 
-            Call call = client.newCall(request);
+             Request.Builder requestBuilder = new Request
+                    .Builder()
+                     .url(httpUrl.toString());
+            Call call = new OkHttpClient.Builder()
+                    .cache(getCache(CACHE_PATH, CACHE_SIZE))
+                    .addInterceptor(getLoggerInterceptor())
+                    .addNetworkInterceptor(cacheInterceptor)
+                    .build()
+                    .newCall(requestBuilder.build());
             if (call != null) {
                 call.enqueue(callback);
             }
@@ -47,23 +80,29 @@ public class HttpUtil {
 
     //  post 请求
 
-    public static void post(String baseUrl, Map<String, String> params, Callback callback) {
+    public  void post(String baseUrl, Map<String, String> params, Callback callback) {
 
-        OkHttpClient okHttpClient = new OkHttpClient();
         FormBody.Builder formBodyBuilder = new FormBody.Builder();
         for (Entry<String, String> entry : params.entrySet()) {
             formBodyBuilder.add(entry.getKey(), entry.getValue());
         }
         FormBody formBody = formBodyBuilder.build();
-        Request request = new Request.Builder()
-                .url(baseUrl)
-                .post(formBody)
-                .build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(callback);
 
+         Request.Builder requestBuilder = new Request
+                .Builder()
+                 .url(baseUrl)
+                 .post(formBody);
+
+        Call call = okHttpBuilder
+                .build()
+                .newCall(requestBuilder.build());
+        if (call != null) {
+            call.enqueue(callback);
+        }
     }
 }
+
+
 
 /*
 将请求参数封装到了Map中

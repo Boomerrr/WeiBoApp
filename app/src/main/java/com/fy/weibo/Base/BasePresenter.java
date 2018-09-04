@@ -1,7 +1,8 @@
-package com.fy.weibo.Base;
+package com.fy.weibo.base;
 
+import com.fy.weibo.interfaces.IModel;
 import com.fy.weibo.interfaces.IPresenter;
-import com.fy.weibo.interfaces.IView;
+import com.fy.weibo.interfaces.IBaseView;
 
 import java.util.Map;
 
@@ -9,40 +10,32 @@ import java.util.Map;
  * Created by Fan on 2018/7/30.
  * Fighting!!!
  */
-public abstract class BasePresenter<T> implements IPresenter<T>{
+public abstract class BasePresenter<M extends IModel, V extends IBaseView> implements IPresenter<V>{
 
-    private IView myView;
+    protected V iView;
+    protected M iModel;
 
+    protected abstract M getModel();
 
-    public abstract void onSuccess(T data);
-    public abstract void onFailure(String e);
-    public BasePresenter(IView view){
-        this.myView = view;
+    @Override
+    public void attachMV(V view) {
+
+        this.iView =  view;
+        iModel = getModel();
     }
 
-    public void attachView(IView view) {
-
-        this.myView = view;
-    }
-
-    public void detachView() {
-        this.myView = null;
+    @Override
+    public void detach() {
+        if (iModel != null && iView != null) {
+            iModel = null;
+            iView = null;
+        }
     }
 
     public boolean isViewAttached() {
 
-        return myView != null;
+        return iView != null;
     }
-
-    public IView getMyView() {
-
-        return myView;
-    }
-
-    public void loadData(String baseUrl, Map<String, String> params, BasePresenter presenter){
-
-    }
-
 
 
 }

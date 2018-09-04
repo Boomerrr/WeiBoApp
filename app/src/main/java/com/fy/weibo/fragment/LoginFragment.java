@@ -1,62 +1,68 @@
 package com.fy.weibo.fragment;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fy.weibo.R;
 import com.fy.weibo.activity.LoginActivity;
-import com.fy.weibo.activity.MainActivity;
+import com.fy.weibo.base.BaseFragment;
 import com.fy.weibo.sdk.Constants;
-import com.fy.weibo.util.DataBaseUtil;
-import com.sina.weibo.sdk.auth.AccessTokenKeeper;
-import com.sina.weibo.sdk.auth.Oauth2AccessToken;
-
-import java.util.Objects;
+import com.fy.weibo.sdk.Oauth;
+import com.fy.weibo.util.DataBase;
+import com.fy.weibo.util.DataBaseHelper;
+import com.fy.weibo.util.NetStateUtil;
+import com.fy.weibo.util.UserState;
 
 /**
  * Created by Fan on 2018/8/16.
  * Fighting!!!
  */
-public class LoginFragment extends Fragment {
+public final class LoginFragment extends BaseFragment {
 
     private EditText accountEdit;
     private EditText passEdit;
     private TextView registerText;
     private LoginActivity loginActivity;
     private Button signButton;
-    private DataBaseUtil dataBaseUtil;
+    private DataBase dataBase;
     private SQLiteDatabase sqLiteDatabase;
     private Cursor cursor;
+    private TextView oauthTextView;
+    private Oauth oauth;
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public int getContentViewId() {
+        return R.layout.login_frag_layout;
+    }
 
-        View view = inflater.inflate(R.layout.login_frag_layout, container, false);
-        accountEdit = view.findViewById(R.id.email);
-        passEdit = view.findViewById(R.id.password);
-        registerText = view.findViewById(R.id.login_text);
-        signButton = view.findViewById(R.id.sign_in_button);
+    @Override
+    public void initAllMembersView(Bundle saveInstanceState) {
+        UserState.setUserStateNull(mContext);
+        oauth = new Oauth(getActivity());
+        accountEdit = mRootView.findViewById(R.id.email);
+        passEdit = mRootView.findViewById(R.id.password);
+        registerText = mRootView.findViewById(R.id.login_text);
+        signButton = mRootView.findViewById(R.id.sign_in_button);
         loginActivity = (LoginActivity) getActivity();
+        oauthTextView = mRootView.findViewById(R.id.oauth);
+
+        oauthTextView.setOnClickListener(v -> {
+            oauth.oauthWeiBo();
+        });
         Log.e("TAG", "hello");
         if (loginActivity != null) {
             TextView textView = loginActivity.textView;
             textView.setText("登  录");
-            dataBaseUtil = new DataBaseUtil(loginActivity, "UserData.db", null, 1);
-            sqLiteDatabase = dataBaseUtil.getWritableDatabase();
+            dataBase = new DataBase(loginActivity, "UserData.db", null, 1);
+            sqLiteDatabase = dataBase.getWritableDatabase();
         }
         registerText.setOnClickListener(v -> {
             FragmentTransaction transaction = loginActivity.fragmentManager.beginTransaction();
@@ -66,68 +72,42 @@ public class LoginFragment extends Fragment {
             transaction.commit();
         });
         signButton.setOnClickListener(v -> {
-            if (!checkAccount()){
-                Log.e("TAG", "没有该账户");
-            } else if (!checkPassword()) {
-                Log.e("TAG", "密码错误");
-            } else {
-
-                Constants.ACCESS_TOKEN = getToken();
-                Oauth2AccessToken accessToken = new Oauth2AccessToken(Constants.ACCESS_TOKEN, null);
-                AccessTokenKeeper.writeAccessToken(getActivity(), accessToken);
-                // String token = Objects.requireNonNull(AccessTokenKeeper.readAccessToken(getActivity())).getToken();
-                // Log.e("TAG", "从AccessTokenKeeper中读取到的token   " + token);
-                // Log.e("TAG", "Constants.ACCESS_TOKEN  " + Constants.ACCESS_TOKEN);
-                Intent intent = new Intent(loginActivity, MainActivity.class);
-                startActivity(intent);
-            }
+            if (NetStateUtil.checkNet(mActivity)) {
+                if (!checkAccount()) {
+                    Log.e("TAG", "没有该账户");
+                    Toast.makeText(loginActivity, "账号错误", Toast.LENGTH_SHORT).show();
+                } else if (!checkPassword()) {
+                    Log.e("TAG", "密码错误");
+                    Toast.makeText(loginActivity, "密码错误", Toast.LENGTH_SHORT).show();
+                } else {
+                    Constants.USER_ACCOUNT = accountEdit.getText().toString();
+                    Constants.USER_PASSWORD = passEdit.getText().toString();
+                    Constants.ACCESS_TOKEN = getToken();
+                    Log.e("TAG", "LoginFragment-----" + Constants.ACCESS_TOKEN);
+                    oauth.isOauth();
+                }
+            } else Toast.makeText(mActivity, "请检查网络", Toast.LENGTH_SHORT).show();
         });
 
-        return view;
+
     }
 
 
     private boolean checkAccount() {
         String account = accountEdit.getText().toString();
-        Cursor cursor = sqLiteDatabase.query("User", null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                String a = cursor.getString(cursor.getColumnIndex("password"));
-                String b = cursor.getString(cursor.getColumnIndex("token"));
-                String dbAccount = cursor.getString(cursor.getColumnIndex("account"));
-                Log.e("TAG", a + "   " + b + "  "+ dbAccount);
-                if (account.equals(dbAccount))
-                    return true;
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        return false;
+        return DataBaseHelper.getDataBaseHelper().checkAccount(account);
     }
 
     private boolean checkPassword() {
-
         String password = passEdit.getText().toString();
         String account = accountEdit.getText().toString();
-        cursor = sqLiteDatabase.rawQuery("SELECT password FROM User WHERE account=" + account, null);
-        cursor.moveToFirst();
-        Log.e("TAG", cursor.getString(0));
-        if (password.equals(cursor.getString(0)))
-            return true;
-        cursor.close();
-        return false;
+        return DataBaseHelper.getDataBaseHelper().checkPassword(account, password);
     }
 
     private String getToken() {
-
         String account = accountEdit.getText().toString();
         String password = passEdit.getText().toString();
-        cursor = sqLiteDatabase.rawQuery("SELECT token FROM User WHERE account= \"" + account + "\" AND password= \"" + password + "\"", null);
-        cursor.moveToFirst();
-        String token = cursor.getString(0);
-        Log.e("TAG", token);
-        cursor.close();
-        return token;
+        return DataBaseHelper.getDataBaseHelper().getUserToken(account, password);
     }
 
 }

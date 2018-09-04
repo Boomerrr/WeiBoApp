@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Fan on 2018/8/8.
  * Fighting!!!
  */
-public class Comments implements Serializable {
+public final class Comments implements Serializable {
 
     private String created_at;
     private String text;

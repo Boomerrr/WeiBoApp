@@ -31,4 +31,14 @@
     <string name="register_oauth">注 册 并 授 权</string>
     <string name="confirm_password">确认密码</string>
     <string name="back">back</string>
+    <string name="share_text">分享文字</string>
+    <string name="share_img">分享图片</string>
+    <string name="share_video">分享视频</string>
+    <string name="location">所在地</string>
+    <string name="sex">性别</string>
+    <string name="time">注册时间</string>
+    <string name="my_comments">我的评论</string>
+
+    <string name="oauth">授 权</string>
+    <string name="mention_me">提到我</string>
 </resources>
